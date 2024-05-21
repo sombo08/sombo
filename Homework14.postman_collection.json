@@ -1,0 +1,716 @@
+{
+	"info": {
+		"_postman_id": "6bdd86a5-6267-47c0-bc3c-c2664487f31a",
+		"name": "Homework14",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31752108"
+	},
+	"item": [
+		{
+			"name": "TestEmailSignUp",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.test(\"Validate message field\", function () {\r",
+							"    var jsonData = pm.request.jsonData;\r",
+							"    var email = jsonData.email; \r",
+							"\r",
+							"    pm.expect(email).to.not.be.null;\r",
+							"    pm.expect(email).to.not.be.empty;\r",
+							"\r",
+							"    if (!email) {\r",
+							"        pm.expect.fail(\"Поле 'email' є обов'язковим\");\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"sombo\",\r\n  \"lastName\": \"sombo\",\r\n  \"email\": \"\",\r\n  \"password\": \"123456789\",\r\n  \"repeatPassword\": \"123456789\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://qauto.forstudy.space/api/auth/signup",
+					"protocol": "https",
+					"host": [
+						"qauto",
+						"forstudy",
+						"space"
+					],
+					"path": [
+						"api",
+						"auth",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TestPasswordSignUp",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.test(\"Validate message field\", function () {\r",
+							"    var jsonData = pm.request.jsonData;\r",
+							"    var password = jsonData.password; \r",
+							"\r",
+							"    pm.expect(password).to.not.be.null;\r",
+							"    pm.expect(password).to.not.be.empty;\r",
+							"\r",
+							"    if (!password) {\r",
+							"        pm.expect.fail(\"Поле 'password' є обов'язковим\");\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"sombo\",\r\n  \"lastName\": \"sombo\",\r\n  \"email\": \"sombo@gmail.com\",\r\n  \"password\": \"\",\r\n  \"repeatPassword\": \"123456789\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://qauto.forstudy.space/api/auth/signup",
+					"protocol": "https",
+					"host": [
+						"qauto",
+						"forstudy",
+						"space"
+					],
+					"path": [
+						"api",
+						"auth",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "NewUser",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"console.log(\"Pre-request Script started\");\r",
+							"\r",
+							"// Парсинг JSON тіла запиту\r",
+							"var requestBody = JSON.parse(pm.request.body.raw);\r",
+							"\r",
+							"// Витягування значення пароля\r",
+							"var newPassword = requestBody.password;\r",
+							"\r",
+							"pm.collectionVariables.set(\"newPassword\", newPassword);\r",
+							"\r",
+							"console.log(\"New password set:\", newPassword);\r",
+							"\r",
+							"\r",
+							"function executeValidation(name, lastName, email, password, repeatPassword, callback) {\r",
+							"    const requestBody = {\r",
+							"        \"name\": name,\r",
+							"        \"lastName\": lastName,\r",
+							"        \"email\": email,\r",
+							"        \"password\": password,\r",
+							"        \"repeatPassword\": repeatPassword\r",
+							"    };\r",
+							"\r",
+							"    pm.sendRequest({\r",
+							"        url: pm.request.url,\r",
+							"        method: pm.request.method,\r",
+							"        header: pm.request.headers,\r",
+							"        body: {\r",
+							"            mode: 'raw',\r",
+							"            raw: JSON.stringify(requestBody)\r",
+							"        }\r",
+							"    }, function (err, res) {\r",
+							"        // Викликаємо колбек з відповіддю в якості аргументу\r",
+							"        callback(res.json());\r",
+							"    });\r",
+							"}\r",
+							"\r",
+							"executeValidation(\"sombo\", \"sombo\", \"sombo30@gmail.com\", \"newn3TkmY25\", \"newn3TkmY25\", function(response) {\r",
+							"    console.log(response);\r",
+							"});\r",
+							"\r",
+							"// Один символ\r",
+							"pm.test(\"Перевірка на один символ\", function(done) {\r",
+							"    executeValidation(\"sombo\", \"sombo\", \"sombo30@gmail.com\", \"a\", \"a\", function(response) {\r",
+							"        console.log(response);\r",
+							"        done();\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Перевірка на декілька символів\", function(done) {\r",
+							"    executeValidation(\"sombo\", \"sombo\", \"sombo30@gmail.com\", \"abc\", \"abc\", function(response) {\r",
+							"        console.log(response);\r",
+							"        done();\r",
+							"    });\r",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"sombo\",\r\n  \"lastName\": \"sombo\",\r\n  \"email\": \"sombo31@gmail.com\",\r\n  \"password\": \"newn3TkmY25\",\r\n  \"repeatPassword\": \"newn3TkmY25\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://qauto.forstudy.space/api/auth/signup",
+					"protocol": "https",
+					"host": [
+						"qauto",
+						"forstudy",
+						"space"
+					],
+					"path": [
+						"api",
+						"auth",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SignIn",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"console.log(\"Checking stored password:\", pm.variables.get(\"newPassword\"));\r",
+							"\r",
+							"function executeValidation(email, password, remember, callback) {\r",
+							"    const requestBody = {\r",
+							"        \"email\": email,\r",
+							"        \"password\": password,\r",
+							"        \"remember\": remember\r",
+							"    };\r",
+							"\r",
+							"    pm.sendRequest({\r",
+							"        url: pm.request.url,\r",
+							"        method: pm.request.method,\r",
+							"        header: pm.request.headers,\r",
+							"        body: {\r",
+							"            mode: 'raw',\r",
+							"            raw: JSON.stringify(requestBody)\r",
+							"        }\r",
+							"    }, function (err, res) {\r",
+							"        // Викликаємо колбек з відповіддю в якості аргументу\r",
+							"        callback(res.json());\r",
+							"    });\r",
+							"}\r",
+							"\r",
+							"// Порожнє поле\r",
+							"executeValidation(\"sombo29@gmail.com\", \"\", false, function(response) {\r",
+							"    console.log(response);\r",
+							"});\r",
+							"\r",
+							"// Один символ\r",
+							"pm.test(\"Перевірка на один символ\", function(done) {\r",
+							"    executeValidation(\"sombo29@gmail.com\", \"a\", false, function(response) {\r",
+							"        console.log(response);\r",
+							"        done(); \r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"// Декілька символів\r",
+							"pm.test(\"Перевірка на декілька символів\", function(done) {\r",
+							"    executeValidation(\"sombo29@gmail.com\", \"abc\", false, function(response) {\r",
+							"        console.log(response);\r",
+							"        done();\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"User is created successfully\", function () {\r",
+							"    pm.expect(pm.response.json().status).to.eql(\"ok\");\r",
+							"    \r",
+							"    // Отримуємо userId з відповіді\r",
+							"    let userId = pm.response.json().data.userId;\r",
+							"    \r",
+							"    // Зберігаємо userId у змінну середовища колекції\r",
+							"    pm.collectionVariables.set(\"userId\", userId);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"sombo30@gmail.com\",\r\n  \"password\": \"{{newPassword}}\",\r\n  \"remember\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://qauto.forstudy.space/api/auth/signin",
+					"protocol": "https",
+					"host": [
+						"qauto",
+						"forstudy",
+						"space"
+					],
+					"path": [
+						"api",
+						"auth",
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get profile",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"User profile validation\", function() {\r",
+							"    const jsonData = pm.response.json().data;\r",
+							"    pm.expect(jsonData.userId).to.be.a(\"number\");\r",
+							"    pm.expect(jsonData.photoFilename).to.be.a(\"string\");\r",
+							"    pm.expect(jsonData.name).to.be.a(\"string\");\r",
+							"    pm.expect(jsonData.lastName).to.be.a(\"string\");\r",
+							"\r",
+							"    if (!jsonData.userId) {\r",
+							"        pm.expect(jsonData.error).to.eql(\"User ID is missing\");\r",
+							"    }\r",
+							"\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]); // Перевірка коду відповіді\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://qauto.forstudy.space/api/users/profile",
+					"protocol": "https",
+					"host": [
+						"qauto",
+						"forstudy",
+						"space"
+					],
+					"path": [
+						"api",
+						"users",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Change profile",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Photo is correct\", function () {\r",
+							"    pm.expect(pm.response.json().data.photoFilename).to.eql(\"user-1621352948859.jpg\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Name is correct\", function () {\r",
+							"    const responseBody = pm.response.json();\r",
+							"    pm.expect(responseBody.data.name).to.eql(\"Sombo\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Last name is correct\", function () {\r",
+							"    const responseBody = pm.response.json();\r",
+							"    pm.expect(responseBody.data.lastName).to.eql(\"Sombo\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Country is correct\", function () {\r",
+							"    const responseBody = pm.response.json();\r",
+							"    pm.expect(responseBody.data.country).to.eql(\"Ukraine\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Date of birth is correct\", function () {\r",
+							"    const dateOfBirth = new Date(pm.response.json().data.dateBirth);\r",
+							"    const currentYear = new Date().getFullYear();\r",
+							"    const expectedYearOfBirth = currentYear - 18; // Перевірка на 18+ років\r",
+							"\r",
+							"    pm.expect(dateOfBirth.getFullYear()).to.eql(expectedYearOfBirth);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"photo\": \"user-1621352948859.jpg\",\r\n  \"name\": \"Sombo\",\r\n  \"lastName\": \"Sombo\",\r\n  \"dateBirth\": \"2006-03-17T15:21:05.000Z\",\r\n  \"country\": \"Ukraine\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://qauto.forstudy.space/api/users/profile",
+					"protocol": "https",
+					"host": [
+						"qauto",
+						"forstudy",
+						"space"
+					],
+					"path": [
+						"api",
+						"users",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Change password",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"User ID is correct in profile update response\", function () {",
+							"    const savedUserId = pm.collectionVariables.get(\"userId\"); ",
+							"    const responseUserId = pm.response.json().data.userId;",
+							"    pm.expect(responseUserId).to.not.be.null;",
+							"    pm.expect(responseUserId).to.not.be.undefined;",
+							"    pm.expect(responseUserId).to.be.a(\"number\");",
+							"    pm.expect(responseUserId).to.eql(Number(savedUserId)); // Перевірка значення, конвертуючи змінну у число для порівняння",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"oldPassword\": \"{{newPassword}}\",\r\n  \"password\": \"newn4TkmY25\",\r\n  \"repeatPassword\": \"newn4TkmY25\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://qauto.forstudy.space/api/users/password",
+					"protocol": "https",
+					"host": [
+						"qauto",
+						"forstudy",
+						"space"
+					],
+					"path": [
+						"api",
+						"users",
+						"password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://qauto.forstudy.space/api/auth/logout",
+					"protocol": "https",
+					"host": [
+						"qauto",
+						"forstudy",
+						"space"
+					],
+					"path": [
+						"api",
+						"auth",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add car",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Парсимо відповідь як JSON\r",
+							"var response = pm.response.json();\r",
+							"\r",
+							"// Зберігаємо значення 'id' в змінну на рівні колекції\r",
+							"pm.collectionVariables.set(\"id\", response.data.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"carBrandId\": 1,\r\n  \"carModelId\": 1,\r\n  \"mileage\": 122\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://qauto.forstudy.space/api/cars",
+					"protocol": "https",
+					"host": [
+						"qauto",
+						"forstudy",
+						"space"
+					],
+					"path": [
+						"api",
+						"cars"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add expenses",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check request fields\", function () {\r",
+							"    const requestBody = JSON.parse(pm.request.body.raw); \r",
+							"    pm.expect(requestBody).to.have.property(\"carId\"); \r",
+							"    pm.expect(requestBody).to.have.property(\"reportedAt\"); \r",
+							"    pm.expect(requestBody).to.have.property(\"mileage\"); \r",
+							"    pm.expect(requestBody).to.have.property(\"liters\"); \r",
+							"    pm.expect(requestBody).to.have.property(\"totalCost\"); \r",
+							"    pm.expect(requestBody).to.have.property(\"forceMileage\");\r",
+							"\r",
+							"    // Перевірка, що значення поля reportedAt відповідає формату дати\r",
+							"    pm.expect(requestBody.reportedAt).to.match(/^\\d{4}-\\d{2}-\\d{2}$/); // Перевірка формату дати\r",
+							"\r",
+							"    // Перевірка, що значення поля mileage більше за попереднє значення, яке ми зберігаємо у колекції\r",
+							"    const previousMileage = pm.collectionVariables.get(\"previousMileage\"); // Отримуємо попереднє значення mileage\r",
+							"    if (previousMileage !== null && previousMileage !== undefined) {\r",
+							"        pm.expect(requestBody.mileage).to.be.gt(previousMileage); // Перевірка, що нове значення mileage більше попереднього\r",
+							"    }\r",
+							"\r",
+							"    pm.collectionVariables.set(\"previousMileage\", requestBody.mileage);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"carId\": \"{{id}}\",\r\n  \"reportedAt\": \"2024-04-28\",\r\n  \"mileage\": 128,\r\n  \"liters\": 11,\r\n  \"totalCost\": 11,\r\n  \"forceMileage\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://qauto.forstudy.space/api/expenses",
+					"protocol": "https",
+					"host": [
+						"qauto",
+						"forstudy",
+						"space"
+					],
+					"path": [
+						"api",
+						"expenses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"User ID is correct in profile update response\", function () {\r",
+							"    const savedUserId = pm.collectionVariables.get(\"userId\"); \r",
+							"    const responseUserId = pm.response.json().data.userId;\r",
+							"    pm.expect(responseUserId).to.not.be.null;\r",
+							"    pm.expect(responseUserId).to.not.be.undefined;\r",
+							"    pm.expect(responseUserId).to.be.a(\"number\");\r",
+							"    pm.expect(responseUserId).to.eql(Number(savedUserId)); // Перевірка значення, конвертуючи змінну у число для порівняння\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://qauto.forstudy.space/api/users",
+					"protocol": "https",
+					"host": [
+						"qauto",
+						"forstudy",
+						"space"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "newPassword",
+			"value": ""
+		},
+		{
+			"key": "id",
+			"value": ""
+		},
+		{
+			"key": "userId",
+			"value": ""
+		},
+		{
+			"key": "previousMileage",
+			"value": ""
+		}
+	]
+}
